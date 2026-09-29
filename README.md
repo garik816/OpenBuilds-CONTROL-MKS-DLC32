@@ -1,6 +1,10 @@
 # OpenBuilds CONTROL
 OpenBuilds CONTROL - Grbl Host / Interface for all CNC style machines running Grbl
 
+## MKS DLC32 V2 branch
+
+This fork's `mks-dlc32-v1.0.390` branch starts at OpenBuilds CONTROL `v1.0.390` and configures one MKS DLC32 V2 at `192.168.74.199:8080`. See [the patch notes and Windows installation steps](MKS-DLC32-V2.md). The upstream downloads linked below do not contain this configuration.
+
 ## Download
 
 #### Latest Version

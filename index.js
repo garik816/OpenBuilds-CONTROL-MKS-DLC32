@@ -497,7 +497,11 @@ var status = {
     interfaces: {
       type: "",
       ports: "",
-      networkDevices: [],
+      networkDevices: [{
+        ip: "192.168.74.199",
+        type: "grbl",
+        banner: ""
+      }],
       activePort: "" // or activeIP in the case of wifi/telnet?
     },
     alarm: ""
@@ -1123,8 +1127,8 @@ io.on("connection", function(socket) {
           hupcl: allowHupcl // Don't set DTR - useful for X32 Reset
         });
       } else if (data.type == "telnet") {
-        console.log("connect", "Connecting to " + data.ip + " via " + data.type);
-        port = net.connect(23, data.ip);
+        console.log("connect", "Connecting to " + data.ip + ":8080 via " + data.type);
+        port = net.connect(8080, data.ip);
         port.isOpen = true;
       }
 
@@ -3760,7 +3764,7 @@ function scanForTelnetDevices(range) {
   oldiplist = status.comms.interfaces.networkDevices;
   const telnetScanOptions = {
     target: range,
-    port: '23',
+    port: '8080',
     status: 'TROU', // Timeout, Refused, Open, Unreachable
     banner: true
   };
@@ -3809,7 +3813,14 @@ function scanForTelnetDevices(range) {
     });
 
     scan.on('done', () => {
-      // finished !
+      // Keep the MKS DLC32 available even if a network scan finds nothing.
+      if (!networkDevices.some(device => device.ip == "192.168.74.199")) {
+        networkDevices.push({
+          ip: "192.168.74.199",
+          type: "grbl",
+          banner: ""
+        });
+      }
       networkDevices.sort((a, b) => {
         return a.ip.split('.')[3] - b.ip.split('.')[3];
       });

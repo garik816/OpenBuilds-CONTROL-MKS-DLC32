@@ -1036,7 +1036,7 @@ function initSocket() {
 
 function scanNetwork() {
 
-  var currentIp = laststatus.driver.ipaddress.split(".")
+  var currentIp = ["192", "168", "74"]
   var scanTemplate = `
   <div class="row mt-2">
     <div class="cell-md-12 mb-1">
@@ -1052,7 +1052,7 @@ function scanNetwork() {
         <input id="scanIp1" type="number" data-clear-button="false" style="width: 80px;" data-append="." data-editable="true" value="` + currentIp[0] + `">.
         <input id="scanIp2" type="number" data-clear-button="false" style="width: 80px;" data-append="." data-editable="true" value="` + currentIp[1] + `">.
         <input id="scanIp3" type="number" data-clear-button="false" style="width: 80px;" data-append="." data-editable="true" value="` + currentIp[2] + `">.
-        <input type="text" readonly disabled value="1-254" data-clear-button="false"  style="width: 80px;" data-editable="true">
+        <input type="text" readonly disabled value="1-255" data-clear-button="false"  style="width: 80px;" data-editable="true">
       </form>
     </div>
   </div>
@@ -1069,7 +1069,7 @@ function scanNetwork() {
       cls: "js-dialog-close success",
       onclick: function() {
         var network = $("#scanIp1").val() + '.' + $("#scanIp2").val() + '.' + $("#scanIp3").val();
-        var range = network + ".1-" + network + ".254"
+        var range = network + ".1-" + network + ".255"
         socket.emit('scannetwork', range)
         $('#controlTab').click();
         $('#consoletab').click();
@@ -1190,10 +1190,11 @@ function populatePortsMenu() {
     } else {
       response += `<optgroup label="Network Ports">`
       for (i = 0; i < laststatus.comms.interfaces.networkDevices.length; i++) {
+        var selected = laststatus.comms.interfaces.networkDevices[i].ip == "192.168.74.199" ? " selected" : "";
         if (laststatus.comms.interfaces.networkDevices[i].type) {
-          response += `<option value="` + laststatus.comms.interfaces.networkDevices[i].ip + `">` + laststatus.comms.interfaces.networkDevices[i].ip + " [ " + laststatus.comms.interfaces.networkDevices[i].type + ` ]</option>`;
+          response += `<option value="` + laststatus.comms.interfaces.networkDevices[i].ip + `"` + selected + `>` + laststatus.comms.interfaces.networkDevices[i].ip + " [ " + laststatus.comms.interfaces.networkDevices[i].type + ` ]</option>`;
         } else {
-          response += `<option value="` + laststatus.comms.interfaces.networkDevices[i].ip + `">` + laststatus.comms.interfaces.networkDevices[i].ip + `</option>`;
+          response += `<option value="` + laststatus.comms.interfaces.networkDevices[i].ip + `"` + selected + `>` + laststatus.comms.interfaces.networkDevices[i].ip + `</option>`;
         }
       };
     }
